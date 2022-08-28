@@ -1,0 +1,10 @@
+.container {
+   margin: 0 auto;
+   padding: 10rem 0;
+   width: 1280px;
+   height: 100vh;
+   text-align: center;
+}
+button {
+   cursor: pointer;
+}
