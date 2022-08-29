@@ -1,6 +1,4 @@
 function followingDotCursor(options, set) {
-   if (document.querySelector("body").classList.contains("elementor-editor-preview")) return;
-
    let hasWrapperEl = options && options.element;
    let element = hasWrapperEl || document.body;
 
@@ -50,6 +48,14 @@ function followingDotCursor(options, set) {
             over = 0;
          });
       });
+      //Проверяем открытие в elementor, отключаем курсор
+      let observer = new MutationObserver(() => {
+         if (document.body.classList.contains("elementor-editor-active")) {
+            canvas.remove();
+            document.body.style.cursor = "auto";
+         }
+      });
+      observer.observe(document.body, { attributeFilter: ["class"] });
    }
 
    function onWindowResize() {
@@ -63,6 +69,8 @@ function followingDotCursor(options, set) {
          canvas.width = width;
          canvas.height = height;
       }
+
+      resolutionOff();
    }
 
    function onMouseMove(e) {
@@ -124,7 +132,18 @@ function followingDotCursor(options, set) {
       };
    }
 
+   //Отключение на устройствах с меньшим разрешением
+   function resolutionOff() {
+      if (window.screen.width < set.resolutionOff) {
+         canvas.remove();
+         document.body.style.cursor = "auto";
+      } else {
+         init();
+      }
+   }
+
    init();
+   resolutionOff();
 }
 followingDotCursor(0, {
    widthOut: 20,
@@ -135,4 +154,5 @@ followingDotCursor(0, {
    heightIn: 3,
    colorIn: "rgba(50, 50, 50, 0.8)",
    colorInHover: "rgba(250, 0, 0, 1)",
+   resolutionOff: 1367,
 });
