@@ -9,7 +9,7 @@ function followingDotCursor(options, set) {
    let dotInner = new Dot(width / 2, height / 2, set.widthIn, set.heightIn);
    let canvas, context;
    var over = 0;
-   const anhors = document.querySelectorAll("[href], button, [onclick]");
+   const anhors = document.querySelectorAll("[href], button, [onclick], [type='submit']");
 
    function init() {
       document.body.style.cursor = "none";
