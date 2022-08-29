@@ -69,7 +69,6 @@ function followingDotCursor(options, set) {
          canvas.width = width;
          canvas.height = height;
       }
-
       resolutionOff();
    }
 
@@ -135,13 +134,13 @@ function followingDotCursor(options, set) {
    //Отключение на устройствах с меньшим разрешением
    function resolutionOff() {
       if (window.screen.width < set.resolutionOff) {
-         canvas.remove();
+         canvas.style.display = "none";
          document.body.style.cursor = "auto";
-      } else {
-         init();
+      } else if (window.screen.width >= set.resolutionOff) {
+         canvas.style.display = "block";
+         document.body.style.cursor = "none";
       }
    }
-
    init();
    resolutionOff();
 }
