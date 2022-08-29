@@ -1,4 +1,6 @@
 function followingDotCursor(options, set) {
+   if (document.querySelector("body").classList.contains("elementor-editor-preview")) return;
+
    let hasWrapperEl = options && options.element;
    let element = hasWrapperEl || document.body;
 
