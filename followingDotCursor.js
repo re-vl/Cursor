@@ -146,13 +146,16 @@ function followingDotCursor(options, set) {
    resolutionOff();
 }
 followingDotCursor(0, {
+   //внешний круг
    widthOut: 20,
    heightOut: 20,
    colorOut: "rgba(50, 50, 50, 0.8)",
    colorOutHover: "rgba(250, 0, 0, 1)",
+   //внутренний круг
    widthIn: 3,
    heightIn: 3,
    colorIn: "rgba(50, 50, 50, 0.8)",
    colorInHover: "rgba(250, 0, 0, 1)",
+   //разрешение экрана для отключения
    resolutionOff: 1367,
 });
