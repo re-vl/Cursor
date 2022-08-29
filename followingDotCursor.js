@@ -1,18 +1,18 @@
-function followingDotCursor(options) {
-   document.body.style.cursor = "none";
+function followingDotCursor(options, set) {
    let hasWrapperEl = options && options.element;
    let element = hasWrapperEl || document.body;
 
    let width = window.innerWidth;
    let height = window.innerHeight;
    let cursor = { x: width / 2, y: width / 2 };
-   let dot = new Dot(width / 2, height / 2, 20, 20);
-   let dotInner = new Dot(width / 2, height / 2, 3, 3);
+   let dot = new Dot(width / 2, height / 2, set.widthOut, set.heightOut);
+   let dotInner = new Dot(width / 2, height / 2, set.widthIn, set.heightIn);
    let canvas, context;
    var over = 0;
-   const anhors = document.querySelectorAll("[href], button");
+   const anhors = document.querySelectorAll("[href], button, [onclick]");
 
    function init() {
+      document.body.style.cursor = "none";
       canvas = document.createElement("canvas");
       context = canvas.getContext("2d");
       canvas.style.top = "0px";
@@ -31,15 +31,6 @@ function followingDotCursor(options) {
          canvas.height = height;
       }
 
-      anhors.forEach((item) => {
-         item.addEventListener("mouseover", () => {
-            over = 1;
-         });
-         item.addEventListener("mouseout", () => {
-            over = 0;
-         });
-      });
-
       bindEvents();
       loop();
    }
@@ -48,6 +39,15 @@ function followingDotCursor(options) {
    function bindEvents() {
       element.addEventListener("mousemove", onMouseMove);
       window.addEventListener("resize", onWindowResize);
+      //Перебор ссылок опеделяем наведение
+      anhors.forEach((item) => {
+         item.addEventListener("mouseover", () => {
+            over = 1;
+         });
+         item.addEventListener("mouseout", () => {
+            over = 0;
+         });
+      });
    }
 
    function onWindowResize() {
@@ -95,19 +95,26 @@ function followingDotCursor(options) {
          this.position.y += (y - this.position.y) / this.lag;
 
          context.beginPath();
-         context.lineWidth = 2;
+         context.lineWidth = 1;
          context.arc(this.position.x, this.position.y, this.width, 0, 2 * Math.PI);
-
+         //Задаем цвет внешнего круга
          if (filled == "stroke") {
+            //Проверяем навидение на элемент, меняем цвет
             if (over) {
-               context.strokeStyle = "rgba(250, 0, 0, 0.8)";
+               context.strokeStyle = set.colorOutHover;
             } else {
-               context.strokeStyle = "rgba(50, 50, 50, 0.8)";
+               context.strokeStyle = set.colorOut;
             }
             context.stroke();
          }
+         //Задаем цвет центральной точки
          if (filled == "fill") {
-            context.fillStyle = "rgba(250, 0, 0, 0.8)";
+            //Проверяем навидение на элемент, меняем цвет
+            if (over) {
+               context.fillStyle = set.colorInHover;
+            } else {
+               context.fillStyle = set.colorIn;
+            }
             context.fill();
          }
 
@@ -117,4 +124,13 @@ function followingDotCursor(options) {
 
    init();
 }
-followingDotCursor();
+followingDotCursor(0, {
+   widthOut: 20,
+   heightOut: 20,
+   colorOut: "rgba(50, 50, 50, 0.8)",
+   colorOutHover: "rgba(250, 0, 0, 1)",
+   widthIn: 3,
+   heightIn: 3,
+   colorIn: "rgba(50, 50, 50, 0.8)",
+   colorInHover: "rgba(250, 0, 0, 1)",
+});
