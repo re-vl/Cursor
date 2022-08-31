@@ -7,7 +7,9 @@ function followingDotCursor(options, set) {
    let cursor = { x: width / 2, y: width / 2 };
    let dot = new Dot(width / 2, height / 2, set.widthOut, set.heightOut);
    let dotInner = new Dot(width / 2, height / 2, set.widthIn, set.heightIn);
-   let canvas, context;
+   let canvas,
+      context,
+      elemActive = 0;
    var over = 0;
    const anhors = document.querySelectorAll("[href], button, [onclick], [type='submit']");
 
@@ -51,8 +53,9 @@ function followingDotCursor(options, set) {
       //Проверяем открытие в elementor, отключаем курсор
       let observer = new MutationObserver(() => {
          if (document.body.classList.contains("elementor-editor-active")) {
-            canvas.remove();
+            canvas.style.display = "none";
             document.body.style.cursor = "auto";
+            elemActive = 1;
          }
       });
       observer.observe(document.body, { attributeFilter: ["class"] });
@@ -133,10 +136,10 @@ function followingDotCursor(options, set) {
 
    //Отключение на устройствах с меньшим разрешением
    function resolutionOff() {
-      if (window.screen.width < set.resolutionOff) {
+      if (window.screen.width < set.resolutionOff && !elemActive) {
          canvas.style.display = "none";
          document.body.style.cursor = "auto";
-      } else if (window.screen.width >= set.resolutionOff) {
+      } else if (window.screen.width >= set.resolutionOff && !elemActive) {
          canvas.style.display = "block";
          document.body.style.cursor = "none";
       }
